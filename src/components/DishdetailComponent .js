@@ -28,7 +28,7 @@ function RenderComment() {
             <ul className="list-unstyled">
                 <li>Comment 1</li>
                 <li>Comment 2</li>
-                <li>Comment 3</li>
+                <li>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date())}</li>
             </ul>
         </div>
     );
