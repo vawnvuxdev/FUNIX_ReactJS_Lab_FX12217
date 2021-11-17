@@ -5,6 +5,7 @@ import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 
 import { DISHES } from "../shared/dishes";
 import { COMMENTS } from "../shared/comments";
@@ -25,7 +26,6 @@ class Main extends Component {
 
   render() {
     const HomePage = () => {
-      console.log("Home Page")
       return (
         <Home
           dish={this.state.dishes.filter((dish) => dish.featured)[0]}
@@ -36,7 +36,6 @@ class Main extends Component {
     };
 
     const DishWithId = ({ match }) => {
-      console.log("Dish detail by ID")
       return (
         <DishDetail
           dish={
@@ -57,6 +56,7 @@ class Main extends Component {
         <div className="container">
           <Switch>
             <Route path="/home" component={HomePage} />
+            <Route exact path="/aboutus" component={() => <About leaders={this.state.leaders} />} />
             <Route
               exact
               path="/menu"
