@@ -25,6 +25,7 @@ class Main extends Component {
 
   render() {
     const HomePage = () => {
+      console.log("Home Page")
       return (
         <Home
           dish={this.state.dishes.filter((dish) => dish.featured)[0]}
@@ -35,6 +36,7 @@ class Main extends Component {
     };
 
     const DishWithId = ({ match }) => {
+      console.log("Dish detail by ID")
       return (
         <DishDetail
           dish={
@@ -56,15 +58,11 @@ class Main extends Component {
           <Switch>
             <Route path="/home" component={HomePage} />
             <Route
-              extract
+              exact
               path="/menu"
               component={() => <Menu dishes={this.state.dishes} />}
             />
-            <Route
-              exact
-              path="/menu/:id"
-              component={DishWithId}
-            />
+            <Route path="/menu/:dishId" component={DishWithId} />
             <Route exact path="/contactus" component={Contact} />
             <Redirect to="/home" />
           </Switch>
