@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardImg,
@@ -7,7 +7,9 @@ import {
   CardTitle,
   Breadcrumb,
   BreadcrumbItem,
+  Button,
 } from "reactstrap";
+import CommentFormModal from "./CommentFormComponent";
 import { Link } from "react-router-dom";
 
 function RenderDish({ dish }) {
@@ -24,7 +26,7 @@ function RenderDish({ dish }) {
   );
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, onClick }) {
   if (comments != null) {
     return (
       <div className="col-12 col-md-6 p-1">
@@ -46,12 +48,29 @@ function RenderComments({ comments }) {
             );
           })}
         </ul>
+        <Button outline color="primary" onClick={onClick}>
+          <i className="fa fa-pencil"></i> Submit comment
+        </Button>
       </div>
     );
   } else return <div></div>;
 }
 
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
+
 const DishDetail = (props) => {
+  const [isCmtFormModalOpen, setIsCmtFormModalOpen] = useState(false);
+
+  const toggleCmtFormModal = () => {
+    setIsCmtFormModalOpen(!isCmtFormModalOpen);
+  };
+
+  const handleCmtFormSubmit = (values) => {
+    alert(JSON.stringify(values));
+  };
+
   if (props.dish != null)
     return (
       <div className="container">
@@ -69,8 +88,19 @@ const DishDetail = (props) => {
         </div>
         <div className="row">
           <RenderDish dish={props.dish} />
-          <RenderComments comments={props.comments} />
+          <RenderComments
+            comments={props.comments}
+            onClick={toggleCmtFormModal}
+          />
         </div>
+        <CommentFormModal
+          isOpen={isCmtFormModalOpen}
+          toggle={toggleCmtFormModal}
+          onSubmit={(values) => handleCmtFormSubmit(values)}
+          required={required}
+          minLength={minLength(2)}
+          maxLength={maxLength(15)}
+        />
       </div>
     );
   else return <div></div>;
