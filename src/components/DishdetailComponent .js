@@ -8,9 +8,104 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Row,
+  Label,
 } from "reactstrap";
-import CommentFormModal from "./CommentFormComponent";
+import { LocalForm, Control, Errors } from "react-redux-form";
 import { Link } from "react-router-dom";
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
+const CommentFormModal = (props) => {
+  const [isCmtFormOpen, setIsCmtFormOpen] = useState(false);
+
+  const toggleCmtFormModal = () => {
+    setIsCmtFormOpen(!isCmtFormOpen);
+  };
+
+  const handleCmtFormSubmit = (values) => {
+    alert(JSON.stringify(values));
+    props.addComment(props.dishId, values.rating, values.author, values.comment)
+    toggleCmtFormModal();
+  };
+
+  return (
+    <div className="m-2">
+      <Button outline color="primary" onClick={toggleCmtFormModal}>
+        <i className="fa fa-pencil"></i> Submit comment
+      </Button>
+      <Modal isOpen={isCmtFormOpen} toggle={toggleCmtFormModal}>
+        <ModalHeader toggle={props.toggle}>Submit Comment</ModalHeader>
+        <ModalBody>
+          <LocalForm onSubmit={(values) => handleCmtFormSubmit(values)}>
+            <Row className="form-group m-2">
+              <Label htmlFor="rating">Rating</Label>
+              <Control.select
+                type="number"
+                className="form-control"
+                model=".rating"
+                id="rating"
+                name="rating"
+                defaultValue={1}
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+              </Control.select>
+            </Row>
+            <Row className="form-group m-2">
+              <Label htmlFor="author">Your Name</Label>
+              <Control.text
+                className="form-control"
+                model=".author"
+                id="author"
+                name="author"
+                validators={{
+                  required,
+                  minLength: minLength(2),
+                  maxLength: maxLength(15),
+                }}
+              />
+            </Row>
+            <Errors
+              className="text-danger"
+              model=".author"
+              show="touched"
+              messages={{
+                required: "Required",
+                minLength: "Must be greater than 2 characters",
+                maxLength: "Must be 15 characters or less",
+              }}
+            />
+            <Row className="form-group m-2">
+              <Label htmlFor="comment">Comment</Label>
+              <Control.textarea
+                className="form-control"
+                model=".comment"
+                id="comment"
+                name="comment"
+              />
+            </Row>
+            <Button
+              type="submit"
+              value="submit"
+              color="primary"
+              className="m-2 "
+            >
+              Submit
+            </Button>
+          </LocalForm>
+        </ModalBody>
+      </Modal>
+    </div>
+  );
+};
 
 function RenderDish({ dish }) {
   return (
@@ -26,7 +121,7 @@ function RenderDish({ dish }) {
   );
 }
 
-function RenderComments({ comments, onClick }) {
+function RenderComments({ comments, addComment, dishId }) {
   if (comments != null) {
     return (
       <div className="col-12 col-md-6 p-1">
@@ -48,29 +143,13 @@ function RenderComments({ comments, onClick }) {
             );
           })}
         </ul>
-        <Button outline color="primary" onClick={onClick}>
-          <i className="fa fa-pencil"></i> Submit comment
-        </Button>
+        <CommentFormModal addComment={addComment} dishId={dishId} />
       </div>
     );
   } else return <div></div>;
 }
 
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !val || val.length <= len;
-const minLength = (len) => (val) => val && val.length >= len;
-
 const DishDetail = (props) => {
-  const [isCmtFormModalOpen, setIsCmtFormModalOpen] = useState(false);
-
-  const toggleCmtFormModal = () => {
-    setIsCmtFormModalOpen(!isCmtFormModalOpen);
-  };
-
-  const handleCmtFormSubmit = (values) => {
-    alert(JSON.stringify(values));
-  };
-
   if (props.dish != null)
     return (
       <div className="container">
@@ -90,17 +169,10 @@ const DishDetail = (props) => {
           <RenderDish dish={props.dish} />
           <RenderComments
             comments={props.comments}
-            onClick={toggleCmtFormModal}
+            addComment={props.addComment}
+            dishId={props.dish.id}
           />
         </div>
-        <CommentFormModal
-          isOpen={isCmtFormModalOpen}
-          toggle={toggleCmtFormModal}
-          onSubmit={(values) => handleCmtFormSubmit(values)}
-          required={required}
-          minLength={minLength(2)}
-          maxLength={maxLength(15)}
-        />
       </div>
     );
   else return <div></div>;
