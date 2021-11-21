@@ -17,7 +17,8 @@ import {
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { Link } from "react-router-dom";
 
-import { Loading } from './LoadingComponent'
+import { Loading } from "./LoadingComponent";
+import { baseUrl } from "../shared/baseUrl";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -32,7 +33,12 @@ const CommentFormModal = (props) => {
 
   const handleCmtFormSubmit = (values) => {
     alert(JSON.stringify(values));
-    props.addComment(props.dishId, values.rating, values.author, values.comment)
+    props.addComment(
+      props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
     toggleCmtFormModal();
   };
 
@@ -114,7 +120,7 @@ function RenderDish({ dish }) {
   return (
     <div className="col-12 col-md-6 p-1">
       <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
@@ -161,8 +167,7 @@ const DishDetail = (props) => {
         </div>
       </div>
     );
-  }
-  else if (props.errMess) {
+  } else if (props.errMess) {
     return (
       <div className="container">
         <div className="row">
@@ -170,8 +175,7 @@ const DishDetail = (props) => {
         </div>
       </div>
     );
-  }
-  else if (props.dish != null)
+  } else if (props.dish != null)
     if (props.dish != null)
       return (
         <div className="container">
