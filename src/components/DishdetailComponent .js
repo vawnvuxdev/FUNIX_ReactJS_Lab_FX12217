@@ -155,7 +155,7 @@ function RenderComments({ comments, addComment, dishId }) {
         <CommentFormModal addComment={addComment} dishId={dishId} />
       </div>
     );
-  } else return <div></div>;
+} else return <div></div>
 }
 
 const DishDetail = (props) => {
