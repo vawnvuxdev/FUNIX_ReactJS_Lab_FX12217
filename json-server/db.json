@@ -1363,6 +1363,14 @@
       ],
       "date": "2021-11-22T07:59:24.413Z",
       "id": 22
+    },
+    {
+      "dishId": 1,
+      "rating": "4",
+      "author": "asdasdasad",
+      "comment": "asdfasdfasf",
+      "date": "2021-11-22T20:56:58.070Z",
+      "id": 23
     }
   ],
   "promotions": [

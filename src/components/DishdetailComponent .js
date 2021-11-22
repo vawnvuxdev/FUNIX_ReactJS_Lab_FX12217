@@ -33,7 +33,7 @@ const CommentFormModal = (props) => {
 
   const handleCmtFormSubmit = (values) => {
     alert(JSON.stringify(values));
-    props.postComment(this.props.dishId, values.rating, values.author, values.comment);
+    props.postComment(props.dishId, values.rating, values.author, values.comment);
     toggleCmtFormModal();
   };
 
