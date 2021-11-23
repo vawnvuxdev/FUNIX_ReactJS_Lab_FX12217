@@ -1371,6 +1371,14 @@
       "comment": "asdfasdfasf",
       "date": "2021-11-22T20:56:58.070Z",
       "id": 23
+    },
+    {
+      "dishId": 0,
+      "rating": "5",
+      "author": "Vawn",
+      "comment": "Test Comment",
+      "date": "2021-11-23T20:16:19.972Z",
+      "id": 24
     }
   ],
   "promotions": [
